@@ -4,7 +4,11 @@ class CarsController < ApplicationController
   # GET /cars
   # GET /cars.json
   def index
-    @cars = Car.all
+    @cars = if current_user.admin?
+              Car.all
+            else
+              Car.where(users_id: current_user)
+            end
   end
 
   # GET /cars/1
@@ -69,6 +73,6 @@ class CarsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def car_params
-      params.require(:car).permit(:brand, :model, :fiscal_power, :vehicle_type, :user_id, :created_at, :updated_at)
+      params.require(:car).permit(:brand, :model, :fiscal_power, :vehicle_type, :user_id, :created_at, :updated_at, user: references)
     end
 end

@@ -1,6 +1,14 @@
 Rails.application.routes.draw do
-  resources :cars
-  devise_for :users
+
+devise_for :users, skip: [:registrations]
+ as :user do
+   get 'users/edit' => 'users/registrations#edit', as: 'edit_user_registration'
+   put 'users' => 'users/registrations#update', as: 'user_registration'
+ end
+
+ resources :cars
+
+ root 'cars#index'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
